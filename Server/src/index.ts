@@ -1,13 +1,13 @@
-import express from "express";
-import mongoose from "mongoose";
+import express, {type Request, type Response} from "express";
 import jwt from "jsonwebtoken";
 import * as z from "zod";
 import bcrypt from "bcrypt";
 import { UserModel } from "./db.js";
+const JWT_USER_PASSWORD = "rahulisworkinghard";
 const app = express();
 app.use(express.json());
 
-app.post("api/v1/signup", async(req, res)=>{
+app.post("/api/v1/signup", async(req, res)=>{
     //zod is a library used to validate the input data by defining a schema
     const requireBody = z.object({
         firstName : z.string().min(3).max(50),
@@ -34,7 +34,7 @@ app.post("api/v1/signup", async(req, res)=>{
         firstName,
         lastName,
         email,
-        password
+        password : hashPassword 
     })
 
     return res.json("You are signed up");
@@ -47,44 +47,51 @@ app.post("api/v1/signup", async(req, res)=>{
     }  
 })
 
-app.post("api/v1/signin", async(req, res)=>{
+app.post("/api/v1/signin", async(req : Request, res : Response)=>{
     const {email, password} = req.body;
-    const user = await UserModel.findOne({
-        email
+    const response = await UserModel.findOne({
+        email : email
     })
-    if(!user || !user.password){
+    if(!response || !response.password){
        return res.status(403).json({
             message : "Invalid email or password"
         })
     }
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if(!passwordMatch){
-       return res.status(401).json({
-            message : "Invalid Credentials"
+    const passwordMatch = await bcrypt.compare(password, response.password);
+    if(passwordMatch){
+        const token = jwt.sign({
+            id : response._id.toString()
+        }, JWT_USER_PASSWORD)
+
+        return res.status(200).json({
+            token : token,
+            message : "You are signed in"
+        })
+    }else{
+        return res.status(403).json({
+            message : "Invalid email or password"
         })
     }
-    return res.status(200).json({
-        message : "You are signed in"
-    })
+    
 })
 
-app.post("api/v1/content", (req, res)=>{
-
-})
-
-app.get("api/v1/content", (req, res)=>{
+app.post("/api/v1/content", (req, res)=>{
 
 })
 
-app.delete("api/v1/content", (req, res)=>{
+app.get("/api/v1/content", (req, res)=>{
 
 })
 
-app.post("api/v1/brain/share", (req, res)=>{
+app.delete("/api/v1/content", (req, res)=>{
 
 })
 
-app.get("api/v1/brain/:shareLink", (req, res)=>{
+app.post("/api/v1/brain/share", (req, res)=>{
+
+})
+
+app.get("/api/v1/brain/:shareLink", (req, res)=>{
 
 })
 
