@@ -2,8 +2,9 @@ import express, {type Request, type Response} from "express";
 import jwt from "jsonwebtoken";
 import * as z from "zod";
 import bcrypt from "bcrypt";
-import { UserModel } from "./db.js";
-const JWT_USER_PASSWORD = "rahulisworkinghard";
+import { ContentModel, UserModel } from "./db.js";
+import { JWT_USER_PASSWORD } from "./config.js";
+import {userMiddleware} from "./middleware.js";
 const app = express();
 app.use(express.json());
 
@@ -75,8 +76,18 @@ app.post("/api/v1/signin", async(req : Request, res : Response)=>{
     
 })
 
-app.post("/api/v1/content", (req, res)=>{
-
+app.post("/api/v1/content", userMiddleware, async (req, res)=>{
+    const {link, title} = req.body;
+    await ContentModel.create({
+        title,
+        link,
+        //@ts-ignore
+        userId : req.userId,
+        tag : []
+    })
+    return res.json({
+        message : "content added"
+    })
 })
 
 app.get("/api/v1/content", (req, res)=>{
