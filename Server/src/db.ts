@@ -13,7 +13,7 @@ const contentSchema = new Schema({
     title : String,
     link : String,
     tag : [{type : mongoose.Types.ObjectId, ref : 'Tag'}],
-    userId : [{type : mongoose.Types.ObjectId, ref : 'User', required : true }]
+    userId : [{type : mongoose.Types.ObjectId, ref : 'users', required : true }]
 })
 
 export const UserModel = model("users", userSchema);
