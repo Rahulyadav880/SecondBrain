@@ -19,7 +19,8 @@ const sizeStyles = {
     "lg" : "py-4 px-6"
 }
 
-const defaultStyles = "rounded-md" //rounded is for the corners(like border-radius)
+
+const defaultStyles = "rounded-md mr-4" //rounded is for the corners(like border-radius)
 
 export const Button = (props : ButtonProps) => {
     return (
