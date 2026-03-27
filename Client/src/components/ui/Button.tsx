@@ -2,14 +2,18 @@
 export interface ButtonProps {
     variant : "primary" | "secondary";
     size : "sm" | "md" | "lg";
-    text : "string";
-    startIcon ? : any;
-    endIcon ? : any;
+    text : string;
+    startIcon ? : number;
+    endIcon ? : number;
     onClick : () => void;
 }
 
 export const Button = (props : ButtonProps) => {
-    return <button></button>
+    return (
+        <button onclick = {onClick}>
+            {props.variant}
+            
+        </button>
+ );
 }
 
-<Button variant = "primary" size = "lg" onClick = {()=> {}} text = {"asd"} startIcon = {} />
