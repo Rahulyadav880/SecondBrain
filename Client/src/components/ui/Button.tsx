@@ -1,10 +1,11 @@
+import type { ReactElement } from "react";
 
 export interface ButtonProps {
     variant : "primary" | "secondary";
     size : "sm" | "md" | "lg";
     text : string;
-    startIcon ? : number;
-    endIcon ? : number;
+    startIcon ? : ReactElement;
+    endIcon ? : ReactElement;
     onClick? : () => void;
 }
 
@@ -27,7 +28,7 @@ export const Button = (props : ButtonProps) => {
         <button className={`${variantOptions[props.variant]} 
             ${defaultStyles} ${sizeStyles[props.size]}`}
         >  
-        {props.text}
+        {props.startIcon} {props.text} {props.endIcon} //order of rendering the things
         </button>
  );
 }
